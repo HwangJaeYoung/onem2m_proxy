@@ -1,0 +1,17 @@
+{
+  "name": "onem2m_proxy",
+  "version": "0.0.1",
+  "description": "onem2m_proxy",
+  "main": "onem2m_proxy.js",
+  "scripts": {
+    "start": "node onem2m_proxy.js"
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "express": "*",
+    "request": "*"
+  },
+  "author": "JaeYoungHwang",
+  "email": "forest62590@gmail.com",
+  "license": "ISC"
+}
