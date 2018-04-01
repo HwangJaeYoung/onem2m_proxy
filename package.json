@@ -9,7 +9,8 @@
   "dependencies": {
     "body-parser": "*",
     "express": "*",
-    "request": "*"
+    "request": "*",
+    "requestretry": "^1.13.0"
   },
   "author": "JaeYoungHwang",
   "email": "forest62590@gmail.com",

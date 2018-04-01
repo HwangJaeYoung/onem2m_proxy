@@ -1,7 +1,7 @@
 var http = require('http');
 var express = require('express');
 var bodyParser = require('body-parser');
-var requestForRedirect = require('request');
+var requestForRedirect = require('requestretry');
 
 var app = express();
 
@@ -20,6 +20,7 @@ app.all('*', function (request, response) {
         console.log("GET, DELETE request have no body");
     } else {
         body = JSON.stringify(body);
+        console.log(body);
     }
 
     // Headers handling
@@ -40,7 +41,10 @@ app.all('*', function (request, response) {
         url: targetURL,
         method: request.method,
         headers: headersForSending,
-        body: body
+        body: body,
+        maxAttempts: 5,   // (default) try 5 times
+        retryDelay: 7000,  // (default) wait for 5s before trying again
+        retryStrategy: requestForRedirect.RetryStrategies.HTTPOrNetworkError // (default) retry on 5xx or network errors
     }, function (error, oneM2MResponse, body) {
         if(typeof(oneM2MResponse) !== 'undefined') {
             var statusCode = oneM2MResponse.statusCode;
@@ -48,7 +52,7 @@ app.all('*', function (request, response) {
             response.status(statusCode).send(oneM2MResponse.body);
         } else { // For example, Request Timeout
             if(error.code === 'ETIMEDOUT') // request timeout
-                callBackForResponse(408);
+                response.status(408).send(oneM2MResponse.body);
         }
     });
 });
